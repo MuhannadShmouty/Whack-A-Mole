@@ -56,7 +56,6 @@ typedef struct{
 
 
 int winningScore = 50;
-int count2 = 0;
 
 Player p1;
 Player p2;
