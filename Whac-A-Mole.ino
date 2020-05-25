@@ -181,6 +181,7 @@ void Game(Player * player, int LEDs[], int sizeofArray, int Player_button)
 
 void findWinner(Player * player1, Player * player2)
 {
+  /***********    Declare a winner according to the score    ***********/ 
   if(player1->Score == winningScore && player2->Score != winningScore)
   {
     while(true)
