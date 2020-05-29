@@ -39,8 +39,8 @@
 #define Player2_button A1
 
 /******     LEDs Pins     ******/
-const int P1LEDs[] = {12, 11, 10, 9, 8};
-const int P2LEDs[] = {0, 1, A2, A3, 13};
+const byte P1LEDs[] = {12, 11, 10, 9, 8};
+const byte P2LEDs[] = {0, 1, A2, A3, 13};
 
 
 LiquidCrystal lcd1(LCD1_RS, LCD1_EN, LCD1_D4, LCD1_D5, LCD1_D6, LCD1_D7);
@@ -50,12 +50,12 @@ LiquidCrystal_I2C lcd2(0x27,16,2);
 typedef struct{
   bool buttonPressed = false;
   long gameSpeed = 3000, timePassed = millis();
-  int random_number, Score = 0;
+  byte random_number, Score = 0;
   float ButtonVoltage = 0;
 }Player;
 
 
-int winningScore = 50;
+byte winningScore = 50;
 
 Player p1;
 Player p2;
@@ -91,8 +91,8 @@ void setup()
 
 void loop() 
 {
-  Game(&p1, P1LEDs, sizeof(P1LEDs) / sizeof(int), Player1_button);
-  Game(&p2, P2LEDs, sizeof(P2LEDs) / sizeof(int), Player2_button);
+  Game(&p1, P1LEDs, sizeof(P1LEDs) / sizeof(byte), Player1_button);
+  Game(&p2, P2LEDs, sizeof(P2LEDs) / sizeof(byte), Player2_button);
   lcd1.setCursor(0, 1);
   lcd1.print(p1.Score);
   lcd2.setCursor(0, 1);
@@ -130,18 +130,15 @@ int FindButton(float voltage)
   }
 }
 
-void GenerateNewNumber(Player * player,int LEDs[], int sizeofArray)
+void GenerateNewNumber(Player * player,byte LEDs[], byte sizeofArray)
 {
   /***********    Generate random Number for first Player    ***********/
-  for(int i = 0; i < sizeofArray; i++)
-  {
-    digitalWrite(LEDs[i], LOW);
-  }
+  digitalWrite(LEDs[player->random_number], LOW);
   player->random_number = random(0, 5);
   digitalWrite(LEDs[player->random_number], HIGH);
 }
 
-void Game(Player * player, int LEDs[], int sizeofArray, int Player_button)
+void Game(Player * player, byte LEDs[], int sizeofArray, byte Player_button)
 {
   /***********    Generate random Number every 3 seconds    ***********/
   
@@ -180,7 +177,8 @@ void Game(Player * player, int LEDs[], int sizeofArray, int Player_button)
 
 void findWinner(Player * player1, Player * player2)
 {
-  /***********    Declare a winner according to the score    ***********/ 
+  /***********    Declare a winner according to the score    ***********/
+  
   if(player1->Score == winningScore && player2->Score != winningScore)
   {
     while(true)
