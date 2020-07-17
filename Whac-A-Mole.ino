@@ -1,11 +1,25 @@
 // Whack-A-Mole game
 
 
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+/////                                     TO-DO                                            /////
+/////                                     UPDATE                                           /////
+/////      Leds turn off for half a second after being pressed or after gameSpeed          /////
+/////       In Setup, initalize random number to a number out of the range (0-4)           /////
+/////         Make the voltages ranges Macros (readability and maintainability)            /////
+/////     No need to change voltage to float (deal with the values 0-1023 directly)        /////
+/////               Read average voltage from buttons for more precision                   /////
+/////                          less magic numbers (use Macros)                             /////
+////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////
+
+
 /*
  * Moles appear one at a time, hit only the correct ones to win.
  * The game speeds up each time you hit the right mole.
  * The score is displayed.
- * Hit the right mole 50 times to win. 
+ * Hit the right mole 50 times to win.
  */
 
  
@@ -95,8 +109,12 @@ void loop()
   Game(&p2, P2LEDs, sizeof(P2LEDs) / sizeof(byte), Player2_button);
   lcd1.setCursor(0, 1);
   lcd1.print(p1.Score);
+  lcd1.print("   ");
+  lcd1.print(p1.ButtonVoltage);
   lcd2.setCursor(0, 1);
   lcd2.print(p2.Score);
+  lcd2.print("   ");
+  lcd2.print(p2.ButtonVoltage);
   findWinner(&p1, &p2);
 }
 
@@ -130,11 +148,16 @@ int FindButton(float voltage)
   }
 }
 
-void GenerateNewNumber(Player * player,byte LEDs[], byte sizeofArray)
+void GenerateNewNumber(Player * player,byte LEDs[])
 {
   /***********    Generate random Number for first Player    ***********/
   digitalWrite(LEDs[player->random_number], LOW);
-  player->random_number = random(0, 5);
+  byte temp = random(0, 5);
+  if (temp == player->random_number)
+  {
+    temp = abs(temp - 1);
+  }
+  player->random_number = temp;
   digitalWrite(LEDs[player->random_number], HIGH);
 }
 
@@ -160,13 +183,13 @@ void Game(Player * player, byte LEDs[], int sizeofArray, byte Player_button)
       if(FindButton(player->ButtonVoltage) == player->random_number)                         
       {
         player->Score++;
-        player->gameSpeed -= 80;                           // number of milliseconds subtracted each time a correct button is pressed
+        //player->gameSpeed -= 80;                           // number of milliseconds subtracted each time a correct button is pressed
         if(player->gameSpeed <= 600)                       // max game speed 0.6 seconds
           player->gameSpeed = 600;
         GenerateNewNumber(player, LEDs, sizeofArray);
         player->timePassed = millis();
-      }
-      player->buttonPressed = true;               
+        player->buttonPressed = true;   
+      }            
     }
   }
   else
