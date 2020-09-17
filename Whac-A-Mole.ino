@@ -1,20 +1,5 @@
 // Whack-A-Mole game
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-/////                                     TO-DO                                            /////
-/////                                     UPDATE                                           /////
-/////      Leds turn off for half a second after being pressed or after gameSpeed          /////
-/////       In Setup, initalize random number to a number out of the range (0-4)           /////
-/////         Make the voltages ranges Macros (readability and maintainability)            /////
-/////     No need to change voltage to float (deal with the values 0-1023 directly)        /////
-/////               Read average voltage from buttons for more precision                   /////
-/////                          less magic numbers (use Macros)                             /////
-////////////////////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////////////////////
-
-
 /*
  * Moles appear one at a time, hit only the correct ones to win.
  * The game speeds up each time you hit the right mole.
